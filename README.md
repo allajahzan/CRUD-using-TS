@@ -1,5 +1,4 @@
-It's a User Management (CRUD) web applicaion using TypeScript 
-======================================================
+It's a User Management (CRUD) web applicaion using TypeScript.
 
 * Compile all the ts files to js files using the command 'tsc' or 'npm run build'.
 
