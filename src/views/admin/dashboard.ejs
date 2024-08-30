@@ -1,0 +1,164 @@
+<%- include('../partials/header') %>
+<body style="background-color: white">
+
+  <%- include('../partials/navbarAdmin') %>
+
+  <div id="snackbar">
+    <!-- <span id="snackbar_icon" class="material-symbols-outlined">
+        task_alt
+    </span> -->
+    <p id="snackbar_msg"></p>
+</div>
+
+  <% if(locals.users.length>0){ %>
+    <section id="dashboard">
+      <div class="container">
+        <div id="users_row" class="row">
+        
+          <% locals.users.forEach(user => { %>
+          
+            <div style="margin-bottom: 20px;" class="col-sm-12 col-md-6 col-lg-6 col-xl-4">
+              <div style="border-radius: 8px; box-shadow: 0rem 0rem 1rem 0rem #e2e1e1; border: none;" class="card">
+                <div class="card-body">
+                  <img src="/uploads/<%= user.image  %>" alt="Profile Picture"
+                    style="width: 110px; height: 110px; border-radius: 50%; object-fit: cover;">
+                  <div style="position: absolute; top: 1.5em; left: 9em;">
+                    <h5 class="card-title">
+                      <%= user.name %>
+                    </h5>
+                    <p style="margin-bottom: 6px;" class="card-text">
+                     <%= user.email  %>
+                    </p>
+                    <p class="card-text">
+                      <%= user.phoneNo  %>
+                    </p>
+                  </div>
+
+                  <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+                    <!-- edit button -->
+                    <div  style="width: 45%;">
+                      <button type="button" style="width: 100%; background-color: rgb(234, 234, 234);"
+                      class="btn btn-light" data-bs-toggle="modal" data-bs-target="#editUserData" id="user-edit-admin" onclick="editUserBtn('<%= user._id %>','<%= user.name %>','<%= user.email %>','<%= user.phoneNo %>')">Edit</button>
+                    </div>
+
+                    <!-- delete button -->
+                    <div  style="width: 45%;">
+                      <button type="button" style="width: 100%;" class="btn btn-dark" data-bs-toggle="modal"
+                       data-bs-target="#deleteUserData" id="user-delete-admin" onclick="deleteUserBtn('<%= user._id %>','<%= user.name %>')">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          <%  }); %>
+          
+        </div>
+      </div>
+    </section>
+
+  <% }else{ %> 
+
+
+     <h4 style="display: flex; justify-content: center; position: relative; top: 250px;">No user Found</h4>
+
+  <% } %>
+
+
+    <!-- Modal for add user by admin-->
+
+    <section id="add-user">
+      <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <form id="user-add-form" class="modal-dialog modal-dialog-centered" onsubmit="addUser(event)">
+          <div class="modal-content user-add">
+            <div class="modal-header">
+              <h1 style="color: white;" class="modal-title fs-5" id="staticBackdropLabel">Add User </h1>
+              <span style="color: white; cursor: pointer;" data-bs-dismiss="modal" aria-label="Close"
+                class="material-symbols-outlined" onclick="clearAddUserForm()">close</span>
+            </div>
+            <div class="modal-body">
+              <input id="uname-add-admin" type="name" placeholder="Name" required autocomplete="off"><br>
+              <input id="uemail-add-admin" type="email" placeholder="Email Id" required autocomplete="off"><br>
+              <input id="uphoneNo-add-admin" type="text" placeholder="Phone No" required autocomplete="off"><br>
+
+              <div style="display: flex; position: relative;">
+                <input type="file" required>
+              </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 1em; padding-left: 1.6em;">
+              <div style="display: flex; justify-content: space-between; position: relative;top: 8px;">
+                <p id="msg-p-add" style="text-align: center; margin-bottom: 0px;"></p>
+                <span id="msg-symb-add" style="margin-left: 5px;" class="material-symbols-outlined"></span>
+              </div>
+              <button type="submit"  class="btn btn-md btn-dark">Add User</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+   
+
+    <!-- Modal for edit user by admin-->
+    
+   
+    <section id="edit-user">
+      <div class="modal fade" id="editUserData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="editUserDataLabel" aria-hidden="true">
+        <form id="user-edit-Form" class="modal-dialog modal-dialog-centered" onsubmit="editUser(event)">
+          <div class="modal-content user-edit">
+            <div class="modal-header">
+              <h1 style="color: white;" class="modal-title fs-5" id="editUserDataLabel">Edit User </h1>
+              <span style="color: white; cursor: pointer;" data-bs-dismiss="modal" aria-label="Close"
+                class="material-symbols-outlined" onclick="clearUserEditFormByadmin()">close</span>
+            </div>
+            <div class="modal-body edit-user">
+              <input id="uname-edit-admin" type="text" placeholder="Name" required autocomplete="off"><br>
+              <input id="uemail-edit-admin" type="text" placeholder="Email Id" required autocomplete="off"><br>
+              <input id="uphoneNo-edit-admin" type="text" placeholder="Phone No" required autocomplete="off"><br>
+              <div style="display: flex; position: relative;">
+              <input id="upic-edit-admin" type="file">
+              <p style="position: absolute; right: 5px; top: 15px" >optional</p>
+            </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 1em; padding-left: 1.6em;">
+              <div style="display: flex; justify-content: space-between; position: relative;top: 8px;">
+                <p id="msg-p-edit" style="text-align: center; margin-bottom: 0px;"></p>
+                <span id="msg-symb-edit" style="margin-left: 5px;" class="material-symbols-outlined"></span>
+              </div>
+              <button type="submit" class="btn btn-md btn-dark">Edit User</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+
+    <!-- modal for permision for deleting user -->
+
+    <section id="delete-user">
+      <div class="modal fade" id="deleteUserData" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="deleteUserDataLabel" aria-hidden="true">
+        <form id="user-delete-form" class="modal-dialog modal-dialog-centered" onsubmit="deleteUser(event)">
+          <div class="modal-content user-edit">
+            <div class="modal-header">
+              <h1 style="color: white;" class="modal-title fs-5" id="deleteUserDataLabel">Delete User </h1>
+              <span style="color: white; cursor: pointer;" data-bs-dismiss="modal" aria-label="Close"
+                class="material-symbols-outlined" onclick="closeDeleteModal()" >close</span>
+            </div>
+            <div class="modal-body">
+              <p style="color: black;">Do you wanna delete <span style="font-weight: bold;" id="delete-user-name"></span>?</p>
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 1em; padding-left: 1.6em;">
+              <div style="display: flex; justify-content: space-between; position: relative;top: 8px;">
+                <p id="msg-p-delete" style="text-align: center; margin-bottom: 0px;"></p>
+                <span id="msg-symb-delete" style="margin-left: 5px;" class="material-symbols-outlined"></span>
+              </div>
+              <button type="submit" class="btn btn-md btn-dark">Confirm delete</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <%- include('../partials/footer') %>
